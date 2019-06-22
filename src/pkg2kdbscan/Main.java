@@ -5,17 +5,35 @@
  */
 package pkg2kdbscan;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author Marcos
  */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+        Data data = new Data();
+        
+        LinkedList<LinkedList<Integer>> readData = new LinkedList<LinkedList<Integer>>();
+        
+        readData = data.readFile("1.in"); //arquivo deve estar na raiz do projeto
+        
+        System.out.println("Numero de nos: "+readData.get(0).get(0));
+        
+        System.out.println("Numero de coordenadas: "+readData.get(0).get(1));
+        
+        System.out.println("Valor de K: "+readData.get(0).get(2));
+        
+        for (int i = 1; i <= readData.get(0).get(0); i++) {
+            for (int j = 0; j < readData.get(0).get(1); j++) {
+                System.out.print(readData.get(i).get(j));
+            }
+            System.out.print("\n");
+        }
+        
     }
     
 }
