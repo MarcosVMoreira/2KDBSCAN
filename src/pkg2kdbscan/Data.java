@@ -5,28 +5,19 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
- *
  * @author Marcos
  */
 public class Data {
     
     private FileReader fileReader;
-    private int numberOfNodes, numberOfCoord, numberOfEdgesToRemove;
-    private LinkedList<Integer> coords;
+    private double numberOfNodes, numberOfCoord, numberOfEdgesToRemove;
+    private LinkedList<Double> coords;
     
-    public LinkedList<LinkedList<Integer>> readFile (String filePath) {
+    public LinkedList<LinkedList<Double>> readFile (String filePath) {
         
-        LinkedList<LinkedList<Integer>> data = new LinkedList<LinkedList<Integer>>();
+        LinkedList<LinkedList<Double>> data = new LinkedList<LinkedList<Double>>();
         
         this.coords = new LinkedList<>();
                 
@@ -39,25 +30,25 @@ public class Data {
             
             String split[] = line.split(" ");
 
-            this.numberOfNodes = Integer.parseInt(split[0]);
-            this.numberOfCoord = Integer.parseInt(split[1]);
-            this.numberOfEdgesToRemove = Integer.parseInt(split[2]);
+            this.numberOfNodes = Double.parseDouble(split[0]);
+            this.numberOfCoord = Double.parseDouble(split[1]);
+            this.numberOfEdgesToRemove = Double.parseDouble(split[2]);
             
-            coords = new LinkedList<Integer>();
+            coords = new LinkedList<Double>();
             
             coords.add(this.numberOfNodes);
             coords.add(this.numberOfCoord);
             coords.add(this.numberOfEdgesToRemove);
             
-            data.add(coords);
+            //data.add(coords);
             
             while ((line = bufferedReader.readLine()) != null) {
-                coords = new LinkedList<Integer>();
+                coords = new LinkedList<Double>();
                 
                 split = line.split(" ");
               
                 for (int i = 0; i < this.numberOfCoord; i++) {
-                    coords.add(Integer.parseInt(split[i]));
+                    coords.add(Double.parseDouble(split[i]));
                 }
                 
                 data.add(coords);
