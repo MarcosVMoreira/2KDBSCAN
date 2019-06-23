@@ -13,14 +13,13 @@ public class Data {
     
     private FileReader fileReader;
     private double numberOfNodes, numberOfCoord, numberOfEdgesToRemove;
-    private LinkedList<Double> coords;
+    private double coords[];
     
-    public LinkedList<LinkedList<Double>> readFile (String filePath) {
+    public double[][] readFile (String filePath) {
         
-        LinkedList<LinkedList<Double>> data = new LinkedList<LinkedList<Double>>();
+        double data[][];
+        int counter = 1;
         
-        this.coords = new LinkedList<>();
-                
         try {
             fileReader = new FileReader(filePath);
 
@@ -34,24 +33,28 @@ public class Data {
             this.numberOfCoord = Double.parseDouble(split[1]);
             this.numberOfEdgesToRemove = Double.parseDouble(split[2]);
             
-            coords = new LinkedList<Double>();
+            data = new double[(int) numberOfNodes+1][(int) numberOfCoord];
             
-            coords.add(this.numberOfNodes);
-            coords.add(this.numberOfCoord);
-            coords.add(this.numberOfEdgesToRemove);
+            coords = new double[(int) numberOfCoord];
             
-            //data.add(coords);
+            coords[0] = this.numberOfNodes;
+            coords[1] = this.numberOfCoord;
+            coords[2] = this.numberOfEdgesToRemove;
+            
+            data[0] = coords;
             
             while ((line = bufferedReader.readLine()) != null) {
-                coords = new LinkedList<Double>();
+                
+                coords = new double[(int) numberOfCoord];
                 
                 split = line.split(" ");
               
                 for (int i = 0; i < this.numberOfCoord; i++) {
-                    coords.add(Double.parseDouble(split[i]));
+                    coords[i] = Double.parseDouble(split[i]);
                 }
                 
-                data.add(coords);
+                data[counter] = coords;
+                counter++;
             }
 
             return data;
@@ -61,6 +64,26 @@ public class Data {
             System.out.println("Falha ao ler uma nova linha.");
         }
         return null;
+    }
+    
+    
+    public Node[] buildNodeArray (double[][] data) {
+        
+        Node nodeArray[] = new Node[(int) data[0][0]];
+        Node aux;
+        double coords[] = new double[(int) data[0][1]];
+        
+        for (int i = 1; i <= data[0][0]; i++) {
+            coords = new double[(int) data[0][1]];
+            aux = new Node(i-1);
+            for (int j = 0; j < data[0][1]; j++) {
+                coords[j] = data[i][j];
+            }
+            aux.setCoords(coords);
+            nodeArray[i-1] = aux;
+        }
+        
+        return nodeArray;
     }
     
 }
