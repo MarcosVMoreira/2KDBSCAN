@@ -35,7 +35,7 @@ public class Data {
             
             data = new double[(int) numberOfNodes+1][(int) numberOfCoord];
             
-            coords = new double[(int) numberOfCoord];
+            coords = new double[3];
             
             coords[0] = this.numberOfNodes;
             coords[1] = this.numberOfCoord;

@@ -10,46 +10,59 @@ public class Main {
     public static void main(String[] args) {
         
         LinkedList<Edge> agmList = new LinkedList<>();
+        LinkedList<Edge> fullEdgeArray = new LinkedList<>();
         
         Data data = new Data();
         Algorithms algorithms;
         
         double readData[][];
         
-        readData = data.readFile("1.in"); //arquivo deve estar na raiz do projeto
+        readData = data.readFile("3.in"); //arquivo deve estar na raiz do projeto
+        
+        /*System.out.println("Lido: ");
+        for (int i = 0; i <= readData[0][0]; i++) {
+            for (int j = 0; j < readData[0][1]; j++) {
+                System.out.print(" "+readData[i][j]);
+            }
+            System.out.println("");
+        }*/
         
         //nodeArray tem apenas nós. A primeira linha, informando observações, atributos e arestas não entra
         Node[] nodeArray = data.buildNodeArray(readData);
         
-        Edge[] edgeArray;
-        Edge[] fullEdgeArray = new Edge[nodeArray.length*5];
-        
-        algorithms = new Algorithms(nodeArray);
-        
-        for (int i = 0; i < nodeArray.length; i++) {
+        /*for (int i = 0; i < nodeArray.length; i++) {
             algorithms.euclideanDistanceCalculation(nodeArray[i]);
         
             edgeArray = new Edge[algorithms.getEdges().length];
             edgeArray = algorithms.getEdges();
 
             for (int j = 0; j < edgeArray.length; j++) {
-                fullEdgeArray[((i)*5+j)] = edgeArray[j];
+                fullEdgeArray[((i)*(int)readData[0][0]+j)] = edgeArray[j];
+            }
+        }*/
+        
+        /*System.out.println("full aray size: "+fullEdgeArray.length);
+        for (int i = 0; i < fullEdgeArray.length; i++) {
+            System.out.println(fullEdgeArray[i].getStart().getNode()+" "+fullEdgeArray[i].getEnd().getNode());
+        }*/
+        
+        
+        algorithms = new Algorithms(nodeArray);
+        
+        for (int i = 0; i < nodeArray.length; i++) {
+            for (int j = 0; j < i; j++) {
+                algorithms = new Algorithms(nodeArray);
+                Edge auxEdge = new Edge(nodeArray[i], nodeArray[j], algorithms.euclideanDistanceCalculationForNodes(nodeArray[i], nodeArray[j]));
+                fullEdgeArray.add(auxEdge);
             }
         }
         
         
-        System.out.println("full aray");
-        for (int i = 0; i < fullEdgeArray.length; i++) {
-            System.out.println(fullEdgeArray[i].getStart().getNode()+" "+fullEdgeArray[i].getEnd().getNode());
-        }
-        
         Agm agm = new Agm(nodeArray, fullEdgeArray);
         
         agmList = agm.agmUsandoKruskall();
-            
         
         System.out.println("Agm gerada");
-        System.out.println("agm size"+agmList.size());
         for (int i = 0; i < agmList.size(); i++) {
             System.out.println(agmList.get(i).getStart().getNode()+" "+agmList.get(i).getEnd().getNode()+" "+agmList.get(i).getWeight());
         }

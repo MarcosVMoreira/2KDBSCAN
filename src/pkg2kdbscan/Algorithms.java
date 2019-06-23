@@ -15,7 +15,7 @@ public class Algorithms {
         edges = new Edge[nodes.length];
     }
     
-    public void euclideanDistanceCalculation (Node node) {
+    public void euclideanDistanceCalculationForArray (Node node) {
         double sum = 0, euclideanDistance = 0;
         Edge auxEdge;
         
@@ -32,6 +32,19 @@ public class Algorithms {
             sum = 0;
         }
     }
+    
+    public double euclideanDistanceCalculationForNodes (Node node1, Node node2) {
+        double sum = 0, euclideanDistance = 0;
+
+        for (int j = 0; j < node1.getCoords().length; j++) {
+            sum += Math.pow((node1.getCoords()[j] - node2.getCoords()[j]), 2);
+        }
+
+        euclideanDistance = Math.sqrt(sum);
+
+        return euclideanDistance;
+    }
+    
 
     /**
      * @return the edges

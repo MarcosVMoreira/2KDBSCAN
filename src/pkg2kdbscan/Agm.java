@@ -1,6 +1,7 @@
 package pkg2kdbscan;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -17,10 +18,10 @@ public class Agm {
     private LinkedList<Edge> notRepeatingEdges;
     private LinkedList<Integer> aux = new LinkedList<>();
     
-    public Agm(Node[] nodeArray, Edge[] edgeArray) {
+    public Agm(Node[] nodeArray, LinkedList<Edge> edgeArray) {
         this.nodeArray = nodeArray;
-        this.edgeArray = edgeArray;
-        this.notRepeatingEdges = new LinkedList<>();
+        //this.edgeArray = edgeArray;
+        this.notRepeatingEdges = edgeArray;
     }
     
     public LinkedList<Edge> agmUsandoKruskall() {
@@ -42,37 +43,35 @@ public class Agm {
         Depois de percorrer todaa a lista de arestas nao repetidas verificando se ele é repetido, se não for, eu adiciono ele a essa lista
         Se ele for, eu ja quebro o for e pulo pro próximo valor de aresta
         */
-        this.notRepeatingEdges.add(this.edgeArray[0]);
+        //this.notRepeatingEdges.add(this.edgeArray[0]);
         
-        for (int i = 1; i < this.edgeArray.length; i++) {
-            for (int j = 0; j < this.notRepeatingEdges.size(); j++) {
-                
-                if (!((this.edgeArray[i].getStart().getNode() == this.notRepeatingEdges.get(j).getEnd().getNode()) &&
-                    (this.edgeArray[i].getEnd().getNode() == this.notRepeatingEdges.get(j).getStart().getNode()))) {
-                    //encontramos diferentes
-                    
-                    /*se for a ultima aresta da lista sem arestas repetidas e nao saiu do desse for ainda,
-                    quer dizer que ela é uma aresta nao repetida, entao adiciono*/
-                    if (j+1 == this.notRepeatingEdges.size()) {
-                        this.notRepeatingEdges.add(this.edgeArray[i]);
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
-        }
+//        for (int i = 1; i < this.edgeArray.length; i++) {
+//            for (int j = 0; j < this.notRepeatingEdges.size(); j++) {
+//                
+//                if (!((this.edgeArray[i].getStart().getNode() == this.notRepeatingEdges.get(j).getEnd().getNode()) &&
+//                    (this.edgeArray[i].getEnd().getNode() == this.notRepeatingEdges.get(j).getStart().getNode()))) {
+//                    //encontramos diferentes
+//                    
+//                    /*se for a ultima aresta da lista sem arestas repetidas e nao saiu do desse for ainda,
+//                    quer dizer que ela é uma aresta nao repetida, entao adiciono*/
+//                    if (j+1 == this.notRepeatingEdges.size()) {
+//                        this.notRepeatingEdges.add(this.edgeArray[i]);
+//                        break;
+//                    }
+//                } else {
+//                    break;
+//                }
+//            }
+//        }
         
         //colocando em ordem de peso a lista de arestas 
         this.notRepeatingEdges.sort((Edge firstEdge, Edge secondEdge) -> Double.compare(firstEdge.getWeight(), secondEdge.getWeight()));
         
         
-        System.out.println("depois de ordenar");
+        /*System.out.println("depois de ordenar");
         for (int i = 0; i < this.notRepeatingEdges.size(); i++) {
             System.out.print(+this.notRepeatingEdges.get(i).getWeight()+" ");
-        }
-        
-        
+        }*/
         
         //formando a AGM
         for (int i = 0; i < notRepeatingEdges.size(); i++) {
