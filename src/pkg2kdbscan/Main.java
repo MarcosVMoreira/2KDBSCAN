@@ -9,6 +9,8 @@ public class Main {
 
     public static void main(String[] args) {
         
+        LinkedList<Edge> agmList = new LinkedList<>();
+        
         Data data = new Data();
         Algorithms algorithms;
         
@@ -21,9 +23,6 @@ public class Main {
         
         Edge[] edgeArray;
         Edge[] fullEdgeArray = new Edge[nodeArray.length*5];
-        
-        
-        
         
         algorithms = new Algorithms(nodeArray);
         
@@ -45,9 +44,15 @@ public class Main {
         }
         
         Agm agm = new Agm(nodeArray, fullEdgeArray);
-
-            agm.agmUsandoKruskall();
+        
+        agmList = agm.agmUsandoKruskall();
             
+        
+        System.out.println("Agm gerada");
+        System.out.println("agm size"+agmList.size());
+        for (int i = 0; i < agmList.size(); i++) {
+            System.out.println(agmList.get(i).getStart().getNode()+" "+agmList.get(i).getEnd().getNode()+" "+agmList.get(i).getWeight());
+        }
             
         /*for (int i = 0; i < edges.length; i++) {
             System.out.print(" Weight: "+edges[i].getWeight());

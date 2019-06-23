@@ -15,6 +15,7 @@ public class Agm {
     private Edge[] edgeArray;
     private ArrayList<Node> nodes[];
     private LinkedList<Edge> notRepeatingEdges;
+    private LinkedList<Integer> aux = new LinkedList<>();
     
     public Agm(Node[] nodeArray, Edge[] edgeArray) {
         this.nodeArray = nodeArray;
@@ -22,15 +23,16 @@ public class Agm {
         this.notRepeatingEdges = new LinkedList<>();
     }
     
-    public Edge[] agmUsandoKruskall() {
+    public LinkedList<Edge> agmUsandoKruskall() {
         
-        Edge[] agm = null;
+        LinkedList<Edge> agm = new LinkedList<>();
         
         this.nodes = new ArrayList[this.nodeArray.length];
 
         for (int i = 0; i < this.nodes.length; i++) {
             this.nodes[i] = new ArrayList<Node>();
             this.nodes[i].add(this.nodeArray[i]);
+            this.aux.add(this.nodeArray[i].getNode());
         }
 
         
@@ -61,13 +63,47 @@ public class Agm {
             }
         }
         
+        //colocando em ordem de peso a lista de arestas 
+        this.notRepeatingEdges.sort((Edge firstEdge, Edge secondEdge) -> Double.compare(firstEdge.getWeight(), secondEdge.getWeight()));
         
         
+        System.out.println("depois de ordenar");
+        for (int i = 0; i < this.notRepeatingEdges.size(); i++) {
+            System.out.print(+this.notRepeatingEdges.get(i).getWeight()+" ");
+        }
+        
+        
+        
+        //formando a AGM
+        for (int i = 0; i < notRepeatingEdges.size(); i++) {
+
+            if (aux.get(notRepeatingEdges.get(i).getStart().getNode()) != aux.get(notRepeatingEdges.get(i).getEnd().getNode())) {
+
+                int u = aux.get(notRepeatingEdges.get(i).getStart().getNode());
+
+                int v = aux.get(notRepeatingEdges.get(i).getEnd().getNode());
+
+                for (int j = 0; j < nodes[v].size(); j++) {
+
+                    nodes[u].add(nodes[v].get(j));
+
+                    aux.set(nodes[v].get(j).id(), u);
+
+                }
+                nodes[v].clear();
+
+                agm.add(notRepeatingEdges.get(i));
+            }
+            
+        }
+        
+        
+        /*System.out.println("depois de ordenar");
+        for (int i = 0; i < this.notRepeatingEdges.size(); i++) {
+            System.out.print(+this.notRepeatingEdges.get(i).getWeight()+" ");
+        }
         
         //continuar implementando a agm
-        
-        
-        /*
         
         LinkedList<LinkedList<Vertice>> conjunto = new LinkedList<LinkedList<Vertice>>();
         LinkedList<Aresta> arestasOrdenadas = new LinkedList<>();
