@@ -19,25 +19,44 @@ public class Main {
         //nodeArray tem apenas nós. A primeira linha, informando observações, atributos e arestas não entra
         Node[] nodeArray = data.buildNodeArray(readData);
         
+        Edge[] edgeArray;
+        Edge[] fullEdgeArray = new Edge[nodeArray.length*5];
+        
+        
+        
+        
         algorithms = new Algorithms(nodeArray);
         
-        algorithms.euclideanDistanceCalculation(nodeArray[0]);
+        for (int i = 0; i < nodeArray.length; i++) {
+            algorithms.euclideanDistanceCalculation(nodeArray[i]);
+        
+            edgeArray = new Edge[algorithms.getEdges().length];
+            edgeArray = algorithms.getEdges();
+
+            for (int j = 0; j < edgeArray.length; j++) {
+                fullEdgeArray[((i)*5+j)] = edgeArray[j];
+            }
+        }
         
         
+        System.out.println("full aray");
+        for (int i = 0; i < fullEdgeArray.length; i++) {
+            System.out.println(fullEdgeArray[i].getStart().getNode()+" "+fullEdgeArray[i].getEnd().getNode());
+        }
         
-        
-        
-        Edge[] edges = new Edge[algorithms.getEdges().length];
-        edges = algorithms.getEdges();
-        
-        for (int i = 0; i < edges.length; i++) {
+        Agm agm = new Agm(nodeArray, fullEdgeArray);
+
+            agm.agmUsandoKruskall();
+            
+            
+        /*for (int i = 0; i < edges.length; i++) {
             System.out.print(" Weight: "+edges[i].getWeight());
             System.out.print(" Start: "+edges[i].getStart().getNode());
             System.out.print(" End: "+edges[i].getEnd().getNode());
             System.out.println("");
         }
         
-        /*Node[] nodeArray = data.buildNodeArray(readData);
+        Node[] nodeArray = data.buildNodeArray(readData);
         
         double[] coords;
         
