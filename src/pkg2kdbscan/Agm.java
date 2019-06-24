@@ -2,8 +2,7 @@ package pkg2kdbscan;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 /**
@@ -13,139 +12,113 @@ import java.util.LinkedList;
 public class Agm {
     
     private Node[] nodeArray;
-    private Edge[] edgeArray;
-    private ArrayList<Node> nodes[];
-    private LinkedList<Edge> notRepeatingEdges;
-    private LinkedList<Integer> aux = new LinkedList<>();
+    private Edge[] notRepeatingEdges;
     
-    public Agm(Node[] nodeArray, LinkedList<Edge> edgeArray) {
+    public Agm(Node[] nodeArray, Edge[] edgeArray) {
         this.nodeArray = nodeArray;
-        //this.edgeArray = edgeArray;
         this.notRepeatingEdges = edgeArray;
     }
     
-    public LinkedList<Edge> agmUsandoKruskall() {
-        
-        LinkedList<Edge> agm = new LinkedList<>();
-        
-        this.nodes = new ArrayList[this.nodeArray.length];
-
-        for (int i = 0; i < this.nodes.length; i++) {
-            this.nodes[i] = new ArrayList<Node>();
-            this.nodes[i].add(this.nodeArray[i]);
-            this.aux.add(this.nodeArray[i].getNode());
+    class edgeComparator implements Comparator<Edge> 
+    { 
+        @Override
+        public int compare(Edge firstEdge, Edge secondEdge) {
+            return Double.compare(firstEdge.getWeight(), secondEdge.getWeight());
         }
+    } 
+    
+    class subset 
+    { 
+        int parent, rank; 
+    }; 
+    
+    int find(subset subsets[], int i) 
+    { 
+        // find root and make root as parent of i (path compression) 
+        if (subsets[i].parent != i) 
+            subsets[i].parent = find(subsets, subsets[i].parent); 
+  
+        return subsets[i].parent; 
+    } 
+    
+    void Union(subset subsets[], int x, int y) 
+    { 
+        int xroot = find(subsets, x); 
+        int yroot = find(subsets, y); 
+  
+        // Attach smaller rank tree under root of high rank tree 
+        // (Union by Rank) 
+        if (subsets[xroot].rank < subsets[yroot].rank) 
+            subsets[xroot].parent = yroot; 
+        else if (subsets[xroot].rank > subsets[yroot].rank) 
+            subsets[yroot].parent = xroot; 
+  
+        // If ranks are same, then make one as root and increment 
+        // its rank by one 
+        else
+        { 
+            subsets[yroot].parent = xroot; 
+            subsets[xroot].rank++; 
+        } 
+    } 
+    
+    void KruskalMST() 
+    { 
+        Edge result[] = new Edge[this.nodeArray.length];  // Tnis will store the resultant MST 
+        int e = 0;  // An index variable, used for result[] 
+        int i = 0;  // An index variable, used for sorted edges 
+        for (i=0; i<this.nodeArray.length; ++i) 
+            result[i] = new Edge(); 
+  
+        // Step 1:  Sort all the edges in non-decreasing order of their 
+        // weight.  If we are not allowed to change the given graph, we 
+        // can create a copy of array of edges 
+        Arrays.sort(notRepeatingEdges, new edgeComparator()); 
 
-        
-        /*criando uma nova lista de arestas sem arestas repetidas. Ex.: aresta 1-0 e 0-1 são repetidas. Portanto, são removidas
-        Lógica: começo pegando o primeiro valor de aresta e salvando na lista de arestas nao repetidas.
-        Pego o X valor de aresta e vejo se ele é igual a algum vamos da lista de arestas nao repetidas
-        Depois de percorrer todaa a lista de arestas nao repetidas verificando se ele é repetido, se não for, eu adiciono ele a essa lista
-        Se ele for, eu ja quebro o for e pulo pro próximo valor de aresta
-        */
-        //this.notRepeatingEdges.add(this.edgeArray[0]);
-        
-//        for (int i = 1; i < this.edgeArray.length; i++) {
-//            for (int j = 0; j < this.notRepeatingEdges.size(); j++) {
-//                
-//                if (!((this.edgeArray[i].getStart().getNode() == this.notRepeatingEdges.get(j).getEnd().getNode()) &&
-//                    (this.edgeArray[i].getEnd().getNode() == this.notRepeatingEdges.get(j).getStart().getNode()))) {
-//                    //encontramos diferentes
-//                    
-//                    /*se for a ultima aresta da lista sem arestas repetidas e nao saiu do desse for ainda,
-//                    quer dizer que ela é uma aresta nao repetida, entao adiciono*/
-//                    if (j+1 == this.notRepeatingEdges.size()) {
-//                        this.notRepeatingEdges.add(this.edgeArray[i]);
-//                        break;
-//                    }
-//                } else {
-//                    break;
-//                }
-//            }
-//        }
-        
-        //colocando em ordem de peso a lista de arestas 
-        this.notRepeatingEdges.sort((Edge firstEdge, Edge secondEdge) -> Double.compare(firstEdge.getWeight(), secondEdge.getWeight()));
-        
-        
-        /*System.out.println("depois de ordenar");
-        for (int i = 0; i < this.notRepeatingEdges.size(); i++) {
-            System.out.print(+this.notRepeatingEdges.get(i).getWeight()+" ");
-        }*/
-        
-        //formando a AGM
-        for (int i = 0; i < notRepeatingEdges.size(); i++) {
-
-            if (aux.get(notRepeatingEdges.get(i).getStart().getNode()) != aux.get(notRepeatingEdges.get(i).getEnd().getNode())) {
-
-                int u = aux.get(notRepeatingEdges.get(i).getStart().getNode());
-
-                int v = aux.get(notRepeatingEdges.get(i).getEnd().getNode());
-
-                for (int j = 0; j < nodes[v].size(); j++) {
-
-                    nodes[u].add(nodes[v].get(j));
-
-                    aux.set(nodes[v].get(j).id(), u);
-
-                }
-                nodes[v].clear();
-
-                agm.add(notRepeatingEdges.get(i));
-            }
-            
-        }
-        
-        
-        /*System.out.println("depois de ordenar");
-        for (int i = 0; i < this.notRepeatingEdges.size(); i++) {
-            System.out.print(+this.notRepeatingEdges.get(i).getWeight()+" ");
-        }
-        
-        //continuar implementando a agm
-        
-        LinkedList<LinkedList<Vertice>> conjunto = new LinkedList<LinkedList<Vertice>>();
-        LinkedList<Aresta> arestasOrdenadas = new LinkedList<>();
-        LinkedList<Integer> aux = new LinkedList<>();
-        LinkedList<Aresta> agm = new LinkedList<>();
-
-        for (int i = 0; i < g.numeroDeVertices(); i++) {
-            conjunto.add(new LinkedList<Vertice>());
-            conjunto.get(i).add(listaVertice.get(i));
-            aux.add(listaVertice.get(i).id());
-        }
-
-        arestasOrdenadas.addAll(listaAresta);
-
-        Comparador comparador = new Comparador();
-
-        Collections.sort(arestasOrdenadas, comparador);
-
-        for (int i = 0; i < arestasOrdenadas.size(); i++) {
-
-            if (aux.get(arestasOrdenadas.get(i).origem().id()) != aux.get(arestasOrdenadas.get(i).destino().id())) {
-
-                int u = aux.get(arestasOrdenadas.get(i).origem().id());
-
-                int v = aux.get(arestasOrdenadas.get(i).destino().id());
-
-                for (int j = 0; j < conjunto.get(v).size(); j++) {
-
-                    conjunto.get(u).add(conjunto.get(v).get(j));
-
-                    aux.set(conjunto.get(v).get(j).id(), u);
-
-                }
-                conjunto.get(v).clear();
-
-                agm.add(arestasOrdenadas.get(i));
-
-            }
-        }*/
-
-        return agm;
-    }
-
-
-
+        // Allocate memory for creating V subsets 
+        subset subsets[] = new subset[this.nodeArray.length]; 
+        for(i=0; i<this.nodeArray.length; ++i) 
+            subsets[i]=new subset(); 
+  
+        // Create V subsets with single elements 
+        for (int v = 0; v < this.nodeArray.length; ++v) 
+        { 
+            subsets[v].parent = v; 
+            subsets[v].rank = 0; 
+        } 
+  
+        i = 0;  // Index used to pick next edge 
+  
+        // Number of edges to be taken is equal to V-1 
+        while (e < this.nodeArray.length - 1) 
+        { 
+            // Step 2: Pick the smallest edge. And increment  
+            // the index for next iteration 
+            Edge next_edge = new Edge(); 
+            next_edge = this.notRepeatingEdges[i++];
+  
+            int x = find(subsets, next_edge.getStart().getNode()); 
+            int y = find(subsets, next_edge.getEnd().getNode()); 
+  
+            // If including this edge does't cause cycle, 
+            // include it in result and increment the index  
+            // of result for next edge 
+            if (x != y) 
+            { 
+                result[e++] = next_edge; 
+                Union(subsets, x, y); 
+            } 
+            // Else discard the next_edge 
+        } 
+  
+        // print the contents of result[] to display 
+        // the built MST 
+        System.out.println("Following are the edges in " +  
+                                     "the constructed MST"); 
+        for (i = 0; i < e; ++i) 
+            System.out.println(result[i].getStart().getNode()+" -- " +  
+                   result[i].getEnd().getNode()+" == " + result[i].getWeight()); 
+    } 
+    
+    
 }

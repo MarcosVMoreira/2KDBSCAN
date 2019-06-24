@@ -21,6 +21,10 @@ public class Edge {
         this.end = end;
         this.weight = weight;
     }
+    
+    public Edge() {
+        
+    }
 
 
     public void setarStart(Node start) {
