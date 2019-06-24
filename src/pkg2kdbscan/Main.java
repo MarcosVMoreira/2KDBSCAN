@@ -10,15 +10,15 @@ public class Main {
     public static void main(String[] args) {
         
         Edge[] fullEdgeArray;
+        Edge[] agmArray;
         
         Data data = new Data();
         Algorithms algorithms;
         
         double readData[][];
         
-        readData = data.readFile("7.in"); //arquivo deve estar na raiz do projeto
+        readData = data.readFile("3.in");
 
-        //nodeArray tem apenas nós. A primeira linha, informando observações, atributos e arestas não entra
         Node[] nodeArray = data.buildNodeArray(readData);
         
         algorithms = new Algorithms(nodeArray);
@@ -26,8 +26,6 @@ public class Main {
         int contador = 0;
         
         fullEdgeArray = new Edge[(nodeArray.length*nodeArray.length-nodeArray.length)/2];
-        
-        System.out.println("size "+fullEdgeArray.length);
         
         for (int i = 0; i < nodeArray.length; i++) {
             for (int j = 0; j < i; j++) {
@@ -40,8 +38,17 @@ public class Main {
         
         Agm agm = new Agm(nodeArray, fullEdgeArray);
         
-
         agm.KruskalMST();
+        
+        agmArray = new Edge[agm.getAgmSize()];
+        
+        agmArray = agm.getAgm();
+
+//        for (int i = 0; i < agmArray.length-1; i++) {
+//            System.out.println(agmArray[i].getStart().getNode()+" "+agmArray[i].getEnd().getNode());
+//        }
+        
+        
         
     }
 }
