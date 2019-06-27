@@ -20,7 +20,7 @@ public class Main {
         
         double readData[][];
         
-        readData = data.readFile("1.in");
+        readData = data.readFile("2.in");
 
         nodeArray = data.buildNodeArray(readData);
         
@@ -59,12 +59,12 @@ public class Main {
             System.out.println(" "+agmArray[j].getStart().getNode()+" "+ agmArray[j].getEnd().getNode()+" "+agmArray[j].getWeight());
         }
         
-        System.out.println("Node array depois: ");
-        for (int i = 0; i < nodeArray.length; i++) {
-            for (int j = 0; j < nodeArray[i].getConnectedNodes().size(); j++) {
-                System.out.println("esse no: "+nodeArray[i].getNode()+" ta ligado no nó "+nodeArray[i].getConnectedNodes().get(j));
-            }
-        }
+//        System.out.println("Node array depois: ");
+//        for (int i = 0; i < nodeArray.length; i++) {
+//            for (int j = 0; j < nodeArray[i].getConnectedNodes().size(); j++) {
+//                System.out.println("esse no: "+nodeArray[i].getNode()+" ta ligado no nó "+nodeArray[i].getConnectedNodes().get(j));
+//            }
+//        }
         
         
         removeEdge((int)readData[0][2]);        
@@ -75,61 +75,69 @@ public class Main {
         int firstToBeRemoved = agmArray.length-numberOfEdgesToRemove-1;
         int groupNumber = 0;
         
+        //removo as ultimas arestas, dependendo do valor de K
         for (int j = firstToBeRemoved; j < agmArray.length-1; j++) {
             agmArray[j].setRemoved(true);
-            if (!removedEdges.contains(agmArray[j].getWeight())) {
-                removedEdges.add(agmArray[j].getWeight());
+        }
+        
+        //seto as conexoes dos nós de acordo com a AGM
+        for (int i = 0; i < agmArray.length-1; i++) {
+            if (!agmArray[i].isRemoved()) {
+                nodeArray[agmArray[i].getStart().getNode()].addToConnectedNodes(agmArray[i].getEnd().getNode());
             }
         }
-        /*
-        int groupCounter = 0; 
-        int noiseNumber = 0;
+        
+        
+        
+        System.out.println("Node array depois: ");
+        for (int i = 0; i < nodeArray.length; i++) {
+            for (int j = 0; j < nodeArray[i].getConnectedNodes().size(); j++) {
+                System.out.println("esse no: "+nodeArray[i].getNode()+" ta ligado no nó "+nodeArray[i].getConnectedNodes().get(j));
+            }
+        }
+        
+        bfs();
+        
+        System.out.println("ue");
+        
+        
+//        int groupCounter = 0; 
+//        int noiseNumber = 0;
+//
+//        groupNumber = groupCounter - noiseNumber;
+//        
+//        
+//        System.out.println("removed edges: ");
+//        for (int i = removedEdges.size()-1; i >= 0; i--) {
+//            System.out.println(removedEdges.get(i));
+//        }
+//        
+//        System.out.println("Numero de grupos = "+groupNumber);
+//        System.out.println("Numero de ruidos = "+noiseNumber);
 
+        
+    }
+    
+    
+    private static int bfs () {
+        int counter = 1;
         for (int i = 0; i < agmArray.length-1; i++) {
             
-             int component = 0;
-
             int node = agmArray[i].getStart().getNode();
             
-            System.out.println("verificando o nó "+i);
-            if (!agmArray[i].isRemoved()) {
-            
-                System.out.println("vertice "+node+" da agm");
-                System.out.println("ligacoes: ");
-                
-                if (!nodeArray[node].isVisited()) {
-                    //pegando todas as conexões do vertice que to analisando atualmente
-                    for (int j = 0; j < nodeArray[node].getConnectedNodes().size(); j++) {
-                        //se o vértice de destino nao foi visitado ainda
-                        if (!nodeArray[nodeArray[node].getConnectedNodes().get(j)].isVisited()) {
-                            groupCounter++;
-                            component++;
-                            nodeArray[nodeArray[node].getConnectedNodes().get(j)].setVisited(true);
-                            
-                        }
+            if (!nodeArray[node].isVisited()) {
+                //pegando todas as conexões do vertice que to analisando atualmente
+                for (int j = 0; j < nodeArray[node].getConnectedNodes().size(); j++) {
+                    //se o vértice de destino nao foi visitado ainda
+                    if (!nodeArray[nodeArray[node].getConnectedNodes().get(j)].isVisited()) {
+                        System.out.println("saindo do nó "+node+" pro nó "+nodeArray[nodeArray[node].getConnectedNodes().get(j)].getNode());
+                        nodeArray[nodeArray[node].getConnectedNodes().get(j)].setVisited(true);
+                        counter++;
                     }
-
-                    if (component == 1) {
-                        noiseNumber++;
-                        System.out.println("RUIDO AQUI");
-                    }
-                    
                 }
-            } 
-            
+            }
         }
         
-        groupNumber = groupCounter - noiseNumber;
-        
-        
-        System.out.println("removed edges: ");
-        for (int i = removedEdges.size()-1; i >= 0; i--) {
-            System.out.println(removedEdges.get(i));
-        }
-        
-        System.out.println("Numero de grupos = "+groupNumber);
-        System.out.println("Numero de ruidos = "+noiseNumber);
-
-        */
+        return counter;
     }
 }

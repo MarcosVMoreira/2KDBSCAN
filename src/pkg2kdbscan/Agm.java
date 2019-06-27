@@ -55,7 +55,7 @@ public class Agm {
             { 
                 getAgm()[e++] = next_edge; 
                 
-                nodeArray[getAgm()[e-1].getStart().getNode()].addToConnectedNodes(getAgm()[e-1].getEnd().getNode());
+                //nodeArray[getAgm()[e-1].getStart().getNode()].addToConnectedNodes(getAgm()[e-1].getEnd().getNode());
                 
                 Union(subsets, x, y); 
                 
