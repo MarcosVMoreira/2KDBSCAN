@@ -1,5 +1,3 @@
-package pkg2kdbscan;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -28,8 +26,8 @@ class Main {
         
         double readData[][];
         
-        //readData = data.readFile("5.in");
-        readData = data.readInput("5.in");
+        readData = data.readFile("6.in");
+        //readData = data.readInput();
         
         
         nodeArray = data.buildNodeArray(readData);
@@ -40,6 +38,8 @@ class Main {
         
         fullEdgeArray = new Edge[(nodeArray.length*nodeArray.length-nodeArray.length)/2];
         
+        
+        //esse n² aqui ta lento. MELHORAR ELE
         for (int i = 0; i < nodeArray.length; i++) {
             for (int j = 0; j < i; j++) {
                 algorithms = new Algorithms(nodeArray);
@@ -48,36 +48,19 @@ class Main {
                 contador++;
             }
         }
+//        
+//        
+//        agm = new Agm(nodeArray, fullEdgeArray);
+//        
+//        agm.KruskalMST();
         
-//        System.out.println("Node array antes: ");
-//        for (int i = 0; i < nodeArray.length; i++) {
-//            for (int j = 0; j < nodeArray[i].getConnectedNodes().size(); j++) {
-//                System.out.println(" "+nodeArray[i].getConnectedNodes().get(j));
-//            }
-//        }
+        //agmArray = new Edge[agm.getAgmSize()];
         
-        agm = new Agm(nodeArray, fullEdgeArray);
-        
-        agm.KruskalMST();
-        
-        agmArray = new Edge[agm.getAgmSize()];
-        
-        agmArray = agm.getAgm();
+        //agmArray = agm.getAgm();
 
-//        System.out.println("AGM fora do metodo ");
-//        for (int j = 0; j < agmArray.length-1; j++) {
-//            System.out.println(" "+agmArray[j].getStart().getNode()+" "+ agmArray[j].getEnd().getNode()+" "+agmArray[j].getWeight());
-//        }
+
         
-//        System.out.println("Node array depois: ");
-//        for (int i = 0; i < nodeArray.length; i++) {
-//            for (int j = 0; j < nodeArray[i].getConnectedNodes().size(); j++) {
-//                System.out.println("esse no: "+nodeArray[i].getNode()+" ta ligado no nó "+nodeArray[i].getConnectedNodes().get(j));
-//            }
-//        }
-        
-        
-        removeEdge((int)readData[0][2]);        
+        //removeEdge((int)readData[0][2]);        
     }
     
     private static void removeEdge (int numberOfEdgesToRemove) {
@@ -100,25 +83,14 @@ class Main {
                 nodeArray[agmArray[i].getEnd().getNode()].addToConnectedNodes(agmArray[i].getStart().getNode());
             }
         }
-        
-        
-        
-//        System.out.println("Node array depois: ");
-//        for (int i = 0; i < nodeArray.length; i++) {
-//            for (int j = 0; j < nodeArray[i].getConnectedNodes().size(); j++) {
-//                System.out.println("esse no: "+nodeArray[i].getNode()+" ta ligado no nó "+nodeArray[i].getConnectedNodes().get(j));
-//            }
-//        }
-        
+
         
         
         for (int i = 0; i < nodeArray.length; i++) {
             if (!nodeArray[i].isVisited()) {
                 int aux = dfs(nodeArray[i].getNode());
-//                System.out.println("aux "+aux);
                 if (aux == 1) {
                     noiseNumber++;
-//                    System.out.println("achei um isolado");
                 }
                 groupCounter++;
             }
@@ -126,7 +98,6 @@ class Main {
         
         groupNumber = groupCounter - noiseNumber;
        
-//        System.out.println("removed edges: ");
         for (int i = removedEdges.size()-1; i >= 0; i--) {
             System.out.printf("%.2f\n", removedEdges.get(i));
             
@@ -218,7 +189,7 @@ class Data {
         return null;
     }
     
-    public double [][] readInput (String filePath) throws IOException {
+    public double [][] readInput () throws IOException {
         double data[][];
         int counter = 1;
         
