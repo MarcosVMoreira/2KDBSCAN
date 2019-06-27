@@ -9,6 +9,7 @@ public class Edge {
     private Node start;
     private Node end;
     private double weight;
+    private boolean removed = false;
     
     public Edge( Node start, Node end ){
         this.start = start;
@@ -60,6 +61,20 @@ public class Edge {
      */
     public double getWeight() {
         return weight;
+    }
+
+    /**
+     * @return the removed
+     */
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    /**
+     * @param removed the removed to set
+     */
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
     }
 
 }

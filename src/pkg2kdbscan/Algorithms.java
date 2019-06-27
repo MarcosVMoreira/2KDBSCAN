@@ -1,7 +1,5 @@
 package pkg2kdbscan;
 
-import java.util.LinkedList;
-
 /**
  * @author Marcos
  */

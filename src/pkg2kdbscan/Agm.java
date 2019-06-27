@@ -1,9 +1,7 @@
 package pkg2kdbscan;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.LinkedList;
 
 /**
  *
@@ -49,13 +47,27 @@ public class Agm {
   
             int x = find(subsets, next_edge.getStart().getNode()); 
             int y = find(subsets, next_edge.getEnd().getNode()); 
+            
+           
+
   
             if (x != y) 
             { 
                 getAgm()[e++] = next_edge; 
+                
+                nodeArray[getAgm()[e-1].getStart().getNode()].addToConnectedNodes(getAgm()[e-1].getEnd().getNode());
+                
                 Union(subsets, x, y); 
+                
             } 
+
         } 
+        
+        
+//        System.out.println("AGM de dentro do metodo ");
+//        for (int j = 0; j < agm.length-1; j++) {
+//            System.out.println(" "+agm[j].getStart().getNode()+" "+ agm[j].getEnd().getNode());
+//        }
         
         this.agmSize = this.agm.length;
     } 
@@ -95,8 +107,8 @@ public class Agm {
             subsets[yroot].parent = xroot; 
             subsets[xroot].rank++; 
         } 
+        
     } 
-    
 
 
     /**
