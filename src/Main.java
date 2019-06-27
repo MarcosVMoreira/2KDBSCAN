@@ -26,8 +26,8 @@ class Main {
         
         double readData[][];
         
-        readData = data.readFile("6.in");
-        //readData = data.readInput();
+        //readData = data.readFile("8.in");
+        readData = data.readInput();
         
         
         nodeArray = data.buildNodeArray(readData);
@@ -42,25 +42,24 @@ class Main {
         //esse n² aqui ta lento. MELHORAR ELE
         for (int i = 0; i < nodeArray.length; i++) {
             for (int j = 0; j < i; j++) {
-                algorithms = new Algorithms(nodeArray);
                 Edge auxEdge = new Edge(nodeArray[j], nodeArray[i], algorithms.euclideanDistanceCalculationForNodes(nodeArray[i], nodeArray[j]));
                 fullEdgeArray[contador] = auxEdge;
                 contador++;
             }
         }
-//        
-//        
-//        agm = new Agm(nodeArray, fullEdgeArray);
-//        
-//        agm.KruskalMST();
         
-        //agmArray = new Edge[agm.getAgmSize()];
         
-        //agmArray = agm.getAgm();
+        agm = new Agm(nodeArray, fullEdgeArray);
+        
+        agm.KruskalMST();
+        
+        agmArray = new Edge[agm.getAgmSize()];
+        
+        agmArray = agm.getAgm();
 
 
         
-        //removeEdge((int)readData[0][2]);        
+        removeEdge((int)readData[0][2]);        
     }
     
     private static void removeEdge (int numberOfEdgesToRemove) {
